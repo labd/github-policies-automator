@@ -6,7 +6,6 @@ from ghpolicy.policy import BasePolicy
 
 
 class VisibilityInternalPolicy(BasePolicy):
-
     def merge(self, other: "VisibilityInternalPolicy") -> "VisibilityInternalPolicy":
         return VisibilityInternalPolicy(None)
 

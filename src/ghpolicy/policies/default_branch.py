@@ -6,7 +6,6 @@ from ghpolicy.policy import BasePolicy
 
 
 class DefaultBranch(BasePolicy):
-
     def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
         """Make sure the default branch is called main and that the master branch
         is deleted.

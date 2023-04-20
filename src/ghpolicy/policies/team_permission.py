@@ -1,13 +1,13 @@
 import copy
+
 from github.Organization import Organization
-from github.Team import Team
 from github.Repository import Repository
+from github.Team import Team
 
 from ghpolicy.policy import BasePolicy
 
 
 class TeamPermissionsPolicy(BasePolicy):
-
     def __init__(self, options: list[dict[str, str]]):
         self.options = options
 
@@ -31,12 +31,14 @@ class TeamPermissionsPolicy(BasePolicy):
                     print(f"Removing {team.name} from {repo.name}")
                     team.remove_from_repos(repo)
             else:
-                wanted_permission = self.teams[name]
+                wanted_permission = self.map_permission(self.teams[name])
                 permissions = team.get_repo_permission(repo)
 
-                if not permissions.raw_data[wanted_permission]:
+                if not permissions.raw_data.get(wanted_permission):
                     if dry_run:
-                        print(f"Would set {team.name} permission to {wanted_permission}")
+                        print(
+                            f"Would set {team.name} permission to {wanted_permission}"
+                        )
                     else:
                         print(f"Setting {team.name} permission to {wanted_permission}")
                         team.set_repo_permission(repo, wanted_permission)
@@ -49,8 +51,14 @@ class TeamPermissionsPolicy(BasePolicy):
                     print(f"Would add {team.name} to {repo.name}")
                 else:
                     print(f"Adding {team.name} to {repo.name}")
-                    team.set_repo_permission(repo, permission)
+                    team.set_repo_permission(repo, self.map_permission(permission))
 
+    def map_permission(self, permission: str) -> str:
+        map_permissions = {
+            "read": "pull",
+            "write": "push",
+        }
+        return map_permissions.get(permission, permission)
 
     @property
     def teams(self) -> dict[str, str]:
@@ -58,8 +66,8 @@ class TeamPermissionsPolicy(BasePolicy):
         result = {}
 
         for obj in items:
-            name = obj.get('name')
-            permission = obj.get('permission')
+            name = obj.get("name")
+            permission = obj.get("permission")
 
             if not name or not permission:
                 raise Exception("name and permission are required")
