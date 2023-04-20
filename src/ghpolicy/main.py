@@ -51,7 +51,6 @@ def run(data: dict, dry_run: bool = False):
     gh = github.Github(token)
     org = gh.get_organization(data['organization'])
     for repo in org.get_repos():
-        print(repo.name)
         for rule in rules:
             if rule.match(repo.name):
                 print("Matched", repo.name, rule)

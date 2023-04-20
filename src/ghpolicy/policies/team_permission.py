@@ -18,8 +18,7 @@ class TeamPermissionsPolicy(BasePolicy):
 
         for name, team in teams.items():
             if name not in self.teams:
-                print(f"Removing {team.name} from {repo.name}")
-                if not dry_run:
+                if dry_run:
                     print(f"Would remove {team.name} from {repo.name}")
                 else:
                     print(f"Removing {team.name} from {repo.name}")
