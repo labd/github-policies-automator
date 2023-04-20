@@ -1,0 +1,7 @@
+config.yaml
+__pypackages__/
+*.pyc
+dist/
+build/
+.vscode/
+.pdm-python
