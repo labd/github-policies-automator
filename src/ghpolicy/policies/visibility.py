@@ -1,4 +1,5 @@
 from github.Team import Team
+from github.Organization import Organization
 from github.Repository import Repository
 
 from ghpolicy.policy import BasePolicy
@@ -6,7 +7,10 @@ from ghpolicy.policy import BasePolicy
 
 class VisibilityInternalPolicy(BasePolicy):
 
-    def apply(self, repo: Repository, dry_run: bool = False):
+    def merge(self, other: "VisibilityInternalPolicy") -> "VisibilityInternalPolicy":
+        return VisibilityInternalPolicy(None)
+
+    def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
         """Make sure the repository is correctly set to private or internal.
 
         Although the GitHub Python SDK doesn't support internal visibility. If

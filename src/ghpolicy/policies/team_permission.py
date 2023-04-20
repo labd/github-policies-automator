@@ -1,3 +1,5 @@
+import copy
+from github.Organization import Organization
 from github.Team import Team
 from github.Repository import Repository
 
@@ -9,12 +11,17 @@ class TeamPermissionsPolicy(BasePolicy):
     def __init__(self, options: list[dict[str, str]]):
         self.options = options
 
-    def apply(self, repo: Repository, dry_run: bool = False):
+    def merge(self, other: "TeamPermissionsPolicy") -> "TeamPermissionsPolicy":
+        data = copy.deepcopy(self.options)
+        data.extend(other.options)
+        return TeamPermissionsPolicy(data)
+
+    def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
         """Make sure the teams are correctly asigned to the repository and have
         the correct permissions.
 
         """
-        teams: dict[str, Team] = {t.name: t for t in repo.get_teams()}
+        teams: dict[str, Team] = {t.slug: t for t in repo.get_teams()}
 
         for name, team in teams.items():
             if name not in self.teams:
@@ -33,6 +40,16 @@ class TeamPermissionsPolicy(BasePolicy):
                     else:
                         print(f"Setting {team.name} permission to {wanted_permission}")
                         team.set_repo_permission(repo, wanted_permission)
+
+        for name, permission in self.teams.items():
+            if name not in teams:
+                team = org.get_team_by_slug(name)
+
+                if dry_run:
+                    print(f"Would add {team.name} to {repo.name}")
+                else:
+                    print(f"Adding {team.name} to {repo.name}")
+                    team.set_repo_permission(repo, permission)
 
 
     @property

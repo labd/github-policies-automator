@@ -1,6 +1,7 @@
 from typing import Type
 from typing import Any
 
+from github.Organization import Organization
 from github.Repository import Repository
 
 
@@ -9,27 +10,29 @@ class BasePolicy:
     def __init__(self, options: Any):
         self.options = options
 
+    def merge(self, other: "BasePolicy") -> "BasePolicy":
+        return self.__class__(None)
+
     def __repr__(self) -> str:
         return "%s()" % self.__class__.__name__
 
 
 class PolicyApplicator:
     known_policies: dict[str, type[BasePolicy]] = {}
-    policies: list[Any] = []
+    policies: list[Any]
 
     def __init__(self):
-        pass
+        self.policies = []
 
     def __repr__(self) -> str:
         return "PolicyApplicator(policies=%r)" % (self.policies)
 
-
     def add(self, policy: Any):
         self.policies.append(policy)
 
-    def apply(self, repo: Repository, dry_run: bool = False):
+    def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
         for policy in self.policies:
-            policy.apply(repo, dry_run)
+            policy.apply(org, repo, dry_run)
 
     @classmethod
     def register(cls, name: str, policy: Type[BasePolicy]):

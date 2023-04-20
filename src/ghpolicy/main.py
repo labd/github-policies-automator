@@ -3,6 +3,7 @@ import os
 import github
 
 from github.Repository import Repository
+from github.Organization import Organization
 from ghpolicy.policies.team_permission import TeamPermissionsPolicy
 from ghpolicy.policies.visibility import VisibilityInternalPolicy
 from ghpolicy.policies.topics import TopicsContainsPolicy
@@ -23,8 +24,8 @@ class Rule:
     def match(self, name: str) -> bool:
         return bool(self._regex.match(name))
 
-    def apply(self, repo: Repository, dry_run: bool = False):
-        self.applicator.apply(repo, dry_run)
+    def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
+        self.applicator.apply(org, repo, dry_run)
 
     @classmethod
     def from_config(cls, rule: dict):
@@ -51,7 +52,7 @@ def run(data: dict, dry_run: bool = False):
     gh = github.Github(token)
     org = gh.get_organization(data['organization'])
     for repo in org.get_repos():
-        for rule in rules:
-            if rule.match(repo.name):
-                print("Matched", repo.name, rule)
-                rule.apply(repo, dry_run=dry_run)
+        matching = [rule for rule in rules if rule.match(repo.name)]
+        for rule in matching:
+            print("Matched", repo.name, rule)
+            rule.apply(org, repo, dry_run=dry_run)

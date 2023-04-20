@@ -1,4 +1,5 @@
 from github.Team import Team
+from github.Organization import Organization
 from github.Repository import Repository
 
 from ghpolicy.policy import BasePolicy
@@ -6,7 +7,7 @@ from ghpolicy.policy import BasePolicy
 
 class DefaultBranch(BasePolicy):
 
-    def apply(self, repo: Repository, dry_run: bool = False):
+    def apply(self, org: Organization, repo: Repository, dry_run: bool = False):
         """Make sure the default branch is called main and that the master branch
         is deleted.
 
