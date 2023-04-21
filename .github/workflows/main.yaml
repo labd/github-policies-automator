@@ -7,6 +7,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
@@ -20,3 +22,26 @@ jobs:
       - name: Lint
         run: ruff check --format=github --exit-zero .
         shell: bash
+
+  check-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install toml-cli
+        run: pip install toml-cli
+
+      - name: Prepare release
+        uses: labd/changie-release-action@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version-command: toml set --toml-path pyproject.toml project.version $PACKAGE_VERSION
+
+          # Trigger another release workflow to do the actual release.
+          # Set to for example `release.yaml` to trigger that workflow.
+          # Default is no trigger
+          release-workflow: 'release.yaml'
