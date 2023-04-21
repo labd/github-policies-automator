@@ -4,7 +4,7 @@ line-length = 88
 
 [project]
 name = "ghpolicy"
-version = "0.0.1"
+version = "0.1.0"
 description = ""
 authors = [
     {name = "Lab Digital", email = "opensource@labdigital.nl"},
