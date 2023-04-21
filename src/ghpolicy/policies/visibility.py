@@ -1,4 +1,3 @@
-from github.Team import Team
 from github.Organization import Organization
 from github.Repository import Repository
 

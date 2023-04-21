@@ -1,5 +1,6 @@
 import copy
 
+from github.GithubException import UnknownObjectException
 from github.Organization import Organization
 from github.Repository import Repository
 from github.Team import Team
@@ -44,14 +45,25 @@ class TeamPermissionsPolicy(BasePolicy):
                         team.set_repo_permission(repo, wanted_permission)
 
         for name, permission in self.teams.items():
-            if name not in teams:
-                team = org.get_team_by_slug(name)
+            if name in teams:
+                continue
 
-                if dry_run:
-                    print(f"Would add {team.name} to {repo.name}")
-                else:
-                    print(f"Adding {team.name} to {repo.name}")
-                    team.set_repo_permission(repo, self.map_permission(permission))
+            # Add repository to the team
+            try:
+                team = org.get_team_by_slug(name)
+            except UnknownObjectException:
+                print(f"Team {name} does not exist")
+                continue
+
+            if dry_run:
+                print(
+                    f"Would add {team.name} to {repo.name} with {permission} permission"
+                )
+            else:
+                print(
+                    f"Adding {team.name} to {repo.name} with {permission} permission"
+                )
+                team.set_repo_permission(repo, self.map_permission(permission))
 
     def map_permission(self, permission: str) -> str:
         map_permissions = {

@@ -1,9 +1,10 @@
-[tool.pdm]
-
+[tool.ruff]
+# Same as Black.
+line-length = 88
 
 [project]
 name = "ghpolicy"
-version = "0.0.1.dev"
+version = "0.0.1"
 description = ""
 authors = [
     {name = "Lab Digital", email = "opensource@labdigital.nl"},

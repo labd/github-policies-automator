@@ -2,7 +2,6 @@ import copy
 
 from github.Organization import Organization
 from github.Repository import Repository
-from github.Team import Team
 
 from ghpolicy.policy import BasePolicy
 

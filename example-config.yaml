@@ -1,0 +1,12 @@
+organization: your-organization
+rules:
+  - name: "^my-repo-.*"
+    policies:
+      visibility-internal: {}
+      topics-contains:
+        - my-repo
+      team-permissions:
+        - name: all
+          permission: write
+        - name: repo-team
+          permission: admin

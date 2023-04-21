@@ -1,15 +1,15 @@
-import re
 import functools
 import os
+import re
+
 import github
-
-from github.Repository import Repository
 from github.Organization import Organization
-from ghpolicy.policies.team_permission import TeamPermissionsPolicy
-from ghpolicy.policies.visibility import VisibilityInternalPolicy
-from ghpolicy.policies.topics import TopicsContainsPolicy
-from ghpolicy.policy import PolicyApplicator
+from github.Repository import Repository
 
+from ghpolicy.policies.team_permission import TeamPermissionsPolicy
+from ghpolicy.policies.topics import TopicsContainsPolicy
+from ghpolicy.policies.visibility import VisibilityInternalPolicy
+from ghpolicy.policy import PolicyApplicator
 
 PolicyApplicator.register("visibility-internal", VisibilityInternalPolicy)
 PolicyApplicator.register("topics-contains", TopicsContainsPolicy)
@@ -56,6 +56,8 @@ def run(data: dict, dry_run: bool = False):
     org = gh.get_organization(data["organization"])
     for repo in org.get_repos():
         matching = [rule for rule in rules if rule.match(repo.name)]
+        if not matching:
+            continue
 
         if len(matching) > 1:
             print("Multiple rules matched", repo.name, matching)

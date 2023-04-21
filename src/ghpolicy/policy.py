@@ -16,6 +16,8 @@ class BasePolicy:
 
 
 class PolicyApplicator:
+    """Applicator owns the policies and applies them to the repository."""
+
     known_policies: dict[str, type[BasePolicy]] = {}
     policies: list[Any]
 
@@ -33,6 +35,10 @@ class PolicyApplicator:
             policy.apply(org, repo, dry_run)
 
     def merge(self, other: "PolicyApplicator") -> "PolicyApplicator":
+        """Merge the policies from the other applicator with this one.
+
+        Returns a new PolicyApplicator
+        """
         applicator = PolicyApplicator()
 
         t = {p.__class__.__name__: p for p in self.policies}
