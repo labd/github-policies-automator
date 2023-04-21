@@ -3,7 +3,7 @@
 line-length = 88
 
 [project]
-name = "ghpolicy"
+name = "github-policies"
 description = "Automate GitHub repository settings."
 readme = "README.md"
 version = "0.1.0"
