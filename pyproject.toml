@@ -6,7 +6,6 @@ line-length = 88
 name = "ghpolicy"
 version = "0.1.0"
 description = "Automate GitHub repository settings."
-long_description = "Automate GitHub policies via a config file."
 authors = [
     {name = "Lab Digital", email = "opensource@labdigital.nl"},
 ]
