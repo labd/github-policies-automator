@@ -25,6 +25,7 @@ jobs:
 
   check-release:
     runs-on: ubuntu-latest
+    needs: [validate]
     steps:
       - uses: actions/checkout@v3
 
