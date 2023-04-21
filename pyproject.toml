@@ -4,8 +4,9 @@ line-length = 88
 
 [project]
 name = "ghpolicy"
-version = "0.1.0"
 description = "Automate GitHub repository settings."
+readme = "README.md"
+version = "0.1.0"
 authors = [
     {name = "Lab Digital", email = "opensource@labdigital.nl"},
 ]
