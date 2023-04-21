@@ -26,6 +26,6 @@ runs:
 
       - name: Run
         shell: bash
-        run: ghpolicy config.yaml
+        run: ghpolicy ${{ inputs.config-file }}
         env:
           GITHUB_TOKEN: ${{ inputs.github-token }}
