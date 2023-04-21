@@ -11,6 +11,10 @@ inputs:
   github-token:
     description: 'GitHub token'
     required: true
+  version:
+    description: 'Version to use'
+    required: false
+    default: 'latest'
 
 runs:
   using: "composite"
@@ -21,7 +25,13 @@ runs:
 
       - name: "Install"
         shell: bash
+        if : ${{ inputs.version == 'latest' }}
         run: pip install git+https://github.com/labd/github-policy.git
+
+      - name: "Install"
+        shell: bash
+        if : ${{ inputs.version != 'latest' }}
+        run: pip install github-policies==${{ inputs.version }}
 
       - name: Run
         shell: bash
