@@ -1,0 +1,31 @@
+name: 'GitHub Policy'
+description: 'Apply GitHub policies'
+branding:
+  icon: 'award'
+  color: 'green'
+
+inputs:
+  config-file:
+    description: 'Config file to use'
+    required: true
+  github-token:
+    description: 'GitHub token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: "Install"
+        shell: bash
+        run: pip install git+https://github.com/labd/github-policy.git
+
+      - name: Run
+        shell: bash
+        run: ghpolicy config.yaml
+        env:
+          GITHUB_TOKEN: ${{ inputs.github-token }}
