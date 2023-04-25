@@ -6,12 +6,14 @@ import github
 from github.Organization import Organization
 from github.Repository import Repository
 
+from ghpolicy.policies.repository_settings import RepositorySettingsPolicy
 from ghpolicy.policies.team_permission import TeamPermissionsPolicy
 from ghpolicy.policies.topics import TopicsContainsPolicy
 from ghpolicy.policies.visibility import VisibilityInternalPolicy
 from ghpolicy.policy import PolicyApplicator
 
 PolicyApplicator.register("visibility-internal", VisibilityInternalPolicy)
+PolicyApplicator.register("repository-settings", RepositorySettingsPolicy)
 PolicyApplicator.register("topics-contains", TopicsContainsPolicy)
 PolicyApplicator.register("team-permissions", TeamPermissionsPolicy)
 
@@ -55,14 +57,13 @@ def run(data: dict, dry_run: bool = False):
     gh = github.Github(token)
     org = gh.get_organization(data["organization"])
     for repo in org.get_repos():
+        print("Processing %s" % repo.name)
         matching = [rule for rule in rules if rule.match(repo.name)]
         if not matching:
             continue
 
         if len(matching) > 1:
-            print("Multiple rules matched", repo.name, matching)
             rule = functools.reduce(Rule.merge, matching)
             rule.apply(org, repo, dry_run=dry_run)
         else:
-            print("Matched", repo.name, matching[0])
             matching[0].apply(org, repo, dry_run=dry_run)

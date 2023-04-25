@@ -3,6 +3,8 @@ rules:
   - name: "^my-repo-.*"
     policies:
       visibility-internal: {}
+      repository-settings:
+        delete-branch-on-merge: true
       topics-contains:
         - my-repo
       team-permissions:
