@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import click
 import yaml
 
+import click
 from ghpolicy.main import run
 
 

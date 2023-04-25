@@ -3,14 +3,13 @@ import os
 import re
 
 import github
-from github.Organization import Organization
-from github.Repository import Repository
-
 from ghpolicy.policies.repository_settings import RepositorySettingsPolicy
 from ghpolicy.policies.team_permission import TeamPermissionsPolicy
 from ghpolicy.policies.topics import TopicsContainsPolicy
 from ghpolicy.policies.visibility import VisibilityInternalPolicy
 from ghpolicy.policy import PolicyApplicator
+from github.Organization import Organization
+from github.Repository import Repository
 
 PolicyApplicator.register("visibility-internal", VisibilityInternalPolicy)
 PolicyApplicator.register("repository-settings", RepositorySettingsPolicy)

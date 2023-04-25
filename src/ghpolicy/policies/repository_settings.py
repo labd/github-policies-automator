@@ -1,8 +1,8 @@
 import copy
-from github.Organization import Organization
-from github.Repository import Repository
 
 from ghpolicy.policy import BasePolicy
+from github.Organization import Organization
+from github.Repository import Repository
 
 
 class RepositorySettingsPolicy(BasePolicy):
