@@ -6,7 +6,7 @@ line-length = 88
 name = "github-policies"
 description = "Automate GitHub repository settings."
 readme = "README.md"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     {name = "Lab Digital", email = "opensource@labdigital.nl"},
 ]
