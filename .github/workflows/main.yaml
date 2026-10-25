@@ -19,8 +19,12 @@ jobs:
         run: pip install ruff
         shell: bash
 
+      - name: Check formatting
+        run: ruff format --check .
+        shell: bash
+
       - name: Lint
-        run: ruff check --format=github --exit-zero .
+        run: ruff check --output-format=github .
         shell: bash
 
   check-release:
