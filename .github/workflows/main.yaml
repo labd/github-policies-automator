@@ -7,9 +7,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
         with:
           python-version: 3.11
           cache: "pip"
@@ -19,17 +19,21 @@ jobs:
         run: pip install ruff
         shell: bash
 
+      - name: Check formatting
+        run: ruff format --check .
+        shell: bash
+
       - name: Lint
-        run: ruff check --format=github --exit-zero .
+        run: ruff check --output-format=github .
         shell: bash
 
   check-release:
     runs-on: ubuntu-latest
     needs: [validate]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
         with:
           python-version: 3.11
 
@@ -37,7 +41,7 @@ jobs:
         run: pip install toml-cli
 
       - name: Prepare release
-        uses: labd/changie-release-action@main
+        uses: labd/changie-release-action@52884337ae69c09e891915014a5621f6080f66ca # v0.6.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version-command: toml set --toml-path pyproject.toml project.version $PACKAGE_VERSION
